@@ -2,11 +2,11 @@ document.addEventListener('DOMContentLoaded', searchMeals(''));
 
 const searchInput = document.getElementById('search');
 const recipesContainer = document.getElementById('recipes');
-/*const modal = document.getElementById('modal');
+const modal = document.getElementsByClassName('modal');
 const modalTitle = document.getElementById('modal-title');
 const modalImage = document.getElementById('modal-image');
 const modalIngredients = document.getElementById('modal-ingredients');
-const modalInstructions = document.getElementById('modal-instructions');*/
+const modalInstructions = document.getElementById('modal-instructions');
 
 function renderMeals(meals) {
   recipesContainer.innerHTML = meals.length ? meals.map(meal => `
@@ -17,7 +17,7 @@ function renderMeals(meals) {
     </div>
   `).join('') : '<p>Nothing found</p>';
 
-  document.querySelectorAll('.recipe').forEach(card => {
+  document.querySelectorAll('.recipe-card').forEach(card => {
     card.addEventListener('click', () => {
       showDetails(card.dataset.id);
     });
@@ -39,3 +39,41 @@ searchInput.addEventListener('input', () => {
   searchMeals(searchInput.value.trim());
 });
 
+
+async function showDetails(mealId) {
+  try {
+    const res = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`);
+    const data = await res.json();
+    const meal = data.meals[0];
+    
+    modalTitle.textContent = meal.strMeal;
+    modalImage.src = meal.strMealThumb;
+    modalInstructions.textContent = meal.strInstructions;
+    
+    modalIngredients.innerHTML = getIngredientsList(meal)
+      .map(item => `<div>${item}</div>`)
+      .join('');
+
+    modal.style.display = 'block';
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Error loading recipe details');
+  }
+}
+
+document.querySelector('.close-btn').onclick = () => modal.style.display = 'none';
+window.onclick = (e) => {
+  if (e.target === modal) modal.style.display = 'none';
+}
+
+function getIngredientsList(meal) {
+  const ingredients = [];
+  for (let i = 1; i <= 20; i++) {
+    if (meal[`strIngredient${i}`]?.trim()) {
+      ingredients.push(
+        `${meal[`strIngredient${i}`]} - ${meal[`strMeasure${i}`]}`
+      );
+    }
+  }
+  return ingredients;
+}

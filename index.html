@@ -3,9 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Recipe Catalog</title>
+  <link rel="icon" href="./img/icon.png" type="image/x-icon">
+  <link rel="stylesheet" href="./styles.css">
+  <title>Recipes</title>
 </head>
 <body>
+  <header>
+    <h1>Рецепты</h1>
+    <form id="search-form">
+      <input type="text" id="search-input" placeholder="Поиск рецепта..." required>
+    </form>
+  </header>
   
+  <main>
+    <section id="recipes"></section>
+  </main>
+
+  <div id="recipe-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 id="modal-title"></h2>
+      <div id="modal-video"></div>
+      <p id="modal-description"></p>
+    </div>
+  </div>
+
+  <footer>
+    <pre>         &copy;Margarita Savonevskaya, 2025 
+ALL RIGHTS RESERVED. FOR PERSONS OVER 18 YEARS OF AGE</pre>
+  </footer>
+
+  <form id="add-recipe-form">
+    <input type="text" id="new-recipe-title" placeholder="Название рецепта" required>
+    <input type="text" id="new-recipe-image" placeholder="URL изображения" required>
+    <textarea id="new-recipe-description" placeholder="Описание" required></textarea>
+    <button type="submit">Добавить рецепт</button>
+</form>
+
+<script src="./script.js"></script>
 </body>
 </html>

@@ -9,9 +9,9 @@
 </head>
 <body>
   <header>
-    <h1>Рецепты</h1>
+    <h1>Recipes</h1>
     <form id="search-form">
-      <input type="text" id="search-input" placeholder="Поиск рецепта..." required>
+      <input type="text" id="search" placeholder="Search for a recipe...">
     </form>
   </header>
   
@@ -19,12 +19,21 @@
     <section id="recipes"></section>
   </main>
 
-  <div id="recipe-modal" class="modal">
+  <div class="modal">
     <div class="modal-content">
-      <span class="close">&times;</span>
+      <span class="close-btn">&times;</span>
       <h2 id="modal-title"></h2>
-      <div id="modal-video"></div>
-      <p id="modal-description"></p>
+      <div class="modal-grid">
+        <div>
+          <img id="modal-image" src="" alt="">
+        </div>
+        <div>
+          <h3>Ingredients:</h3>
+          <div class="ingredients-list" id="modal-ingredients"></div>
+          <h3>Instructions:</h3>
+          <p id="modal-instructions"></p>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -34,10 +43,10 @@ ALL RIGHTS RESERVED. FOR PERSONS OVER 18 YEARS OF AGE</pre>
   </footer>
 
   <form id="add-recipe-form">
-    <input type="text" id="new-recipe-title" placeholder="Название рецепта" required>
-    <input type="text" id="new-recipe-image" placeholder="URL изображения" required>
-    <textarea id="new-recipe-description" placeholder="Описание" required></textarea>
-    <button type="submit">Добавить рецепт</button>
+    <input type="text" id="new-recipe-title" placeholder="Title of recipe" required>
+    <input type="text" id="new-recipe-image" placeholder="URL of image" required>
+    <textarea id="new-recipe-description" placeholder="Description" required></textarea>
+    <button type="submit">Add recipe</button>
 </form>
 
 <script src="./script.js"></script>

@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="./img/icon.png" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Dosis:wght@200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles.css">
   <title>Recipes</title>
 </head>
@@ -20,21 +23,33 @@
   </main>
 
   <div class="modal">
+  <div class="modal-wrapper">
     <div class="modal-content">
-      <span class="close-btn">&times;</span>
+      <span class="close">&times;</span>
       <h2 id="modal-title"></h2>
       <div class="modal-grid">
         <div>
           <img id="modal-image" src="" alt="">
         </div>
         <div>
-          <h3>Ingredients:</h3>
-          <div class="ingredients-list" id="modal-ingredients"></div>
-          <h3>Instructions:</h3>
+          <h3 id="modal-subtitle">Ingredients:</h3>
+          <table class="ingredients-table" id="modal-ingredients">
+            <thead>
+              <tr>
+                <th>Ingredient</th>
+                <th>Measure</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+          <h3 id="modal-subtitle">Instruction:</h3>
           <p id="modal-instructions"></p>
         </div>
       </div>
     </div>
+  </div>
+
   </div>
 
   <footer>
@@ -52,3 +67,40 @@ ALL RIGHTS RESERVED. FOR PERSONS OVER 18 YEARS OF AGE</pre>
 <script src="./script.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+app.get('/api/meals', async (req, res) => {
+  try {
+    const { search } = req.query;
+    const url = search 
+      ? `https://www.themealdb.com/api/json/v1/1/search.php?s=${search}`
+      : 'https://www.themealdb.com/api/json/v1/1/filter.php?c=Dessert';
+
+    const apiRes = await fetch(url);
+    const data = await apiRes.json();
+
+    // Для пустого поиска получаем полные данные
+    if (!search && data.meals) {
+      const detailedMeals = await Promise.all(data.meals.map(async meal => {
+        const detailRes = await fetch(
+          `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${meal.idMeal}`
+        );
+        const detailData = await detailRes.json();
+        return detailData.meals[0];
+      }));
+      res.json(detailedMeals);
+    } else {
+      res.json(data.meals || []);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'API request failed' });
+  }
+});

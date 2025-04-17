@@ -15,7 +15,18 @@ app.get('/api/meals', async (req, res) => {
 
     const apiRes = await fetch(url);
     const data = await apiRes.json();
-    res.json(data.meals || []);
+    if (!search && data.meals) {
+      const detailedMeals = await Promise.all(data.meals.map(async meal => {
+        const detailRes = await fetch(
+          `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${meal.idMeal}`
+        );
+        const detailData = await detailRes.json();
+        return detailData.meals[0];
+      }));
+      res.json(detailedMeals);
+    } else {
+      res.json(data.meals || []);
+    }
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ error: 'API request failed' });

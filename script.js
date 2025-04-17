@@ -2,7 +2,9 @@ document.addEventListener('DOMContentLoaded', searchMeals(''));
 
 const searchInput = document.getElementById('search');
 const recipesContainer = document.getElementById('recipes');
-const modal = document.getElementsByClassName('modal');
+const modal = document.querySelector('.modal');
+const modalWrapper = document.querySelector('.modal-wrapper');
+const modalContent = document.querySelector('.modal-content');
 const modalTitle = document.getElementById('modal-title');
 const modalImage = document.getElementById('modal-image');
 const modalIngredients = document.getElementById('modal-ingredients');
@@ -12,15 +14,13 @@ function renderMeals(meals) {
   recipesContainer.innerHTML = meals.length ? meals.map(meal => `
     <div class="recipe-card" data-id="${meal.idMeal}">
       <h3>${meal.strMeal}</h3>
-      <img src="${meal.strMealThumb}/preview" alt="${meal.strMeal}">
-      <p>${meal.strInstructions ? meal.strInstructions.slice(0, 100) + '...' : 'Description is missing'}</p>
+      <img class="recipe-card__img" src="${meal.strMealThumb}/preview" alt="${meal.strMeal}" loading="lazy">
     </div>
   `).join('') : '<p>Nothing found</p>';
 
-  document.querySelectorAll('.recipe-card').forEach(card => {
-    card.addEventListener('click', () => {
-      showDetails(card.dataset.id);
-    });
+  recipesContainer.addEventListener('click', (e) => {
+    const card = e.target.closest('.recipe-card');
+    if (card) showDetails(card.dataset.id);
   });
 }
 
@@ -49,31 +49,46 @@ async function showDetails(mealId) {
     modalTitle.textContent = meal.strMeal;
     modalImage.src = meal.strMealThumb;
     modalInstructions.textContent = meal.strInstructions;
+    modalContent.style.backgroundImage = `url('${meal.strMealThumb}') no-repeat`;
+    
     
     modalIngredients.innerHTML = getIngredientsList(meal)
-      .map(item => `<div>${item}</div>`)
-      .join('');
+    .map(item => `
+      <tr>
+        <td>${item.ingredient}</td>
+        <td>${item.measure || '-'}</td>
+      </tr>
+    `).join('');
 
-    modal.style.display = 'block';
+    modal.classList.add('active');
   } catch (error) {
     console.error('Error:', error);
     alert('Error loading recipe details');
   }
 }
 
-document.querySelector('.close-btn').onclick = () => modal.style.display = 'none';
-window.onclick = (e) => {
-  if (e.target === modal) modal.style.display = 'none';
-}
+document.querySelector('.close').addEventListener('click', () => {
+  modal.classList.remove('active');
+});
+
+window.addEventListener('click', (e) => {
+  if (e.target === modalWrapper) modal.classList.remove('active');
+});
 
 function getIngredientsList(meal) {
   const ingredients = [];
-  for (let i = 1; i <= 20; i++) {
-    if (meal[`strIngredient${i}`]?.trim()) {
-      ingredients.push(
-        `${meal[`strIngredient${i}`]} - ${meal[`strMeasure${i}`]}`
-      );
+  
+  for(let i = 1; i <= 20; i++) {
+    const ingredient = meal[`strIngredient${i}`];
+    const measure = meal[`strMeasure${i}`];
+    
+    if(ingredient?.trim()) {
+      ingredients.push({
+        ingredient: ingredient.trim(),
+        measure: (measure || '').trim() 
+      });
     }
   }
+  
   return ingredients;
 }

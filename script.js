@@ -59,7 +59,6 @@ function renderPagination(totalItems, currentPage) {
   
   let buttons = '';
   
-  // Кнопка "Назад"
   buttons += `
     <button class="page-btn ${currentPage === 1 ? 'disabled' : ''}" 
             data-page="${currentPage - 1}"
@@ -67,7 +66,6 @@ function renderPagination(totalItems, currentPage) {
       ←
     </button>`;
 
-  // Номера страниц
   for(let i = 1; i <= totalPages; i++) {
     buttons += `
       <button class="page-btn ${i === currentPage ? 'active' : ''}" 
@@ -76,7 +74,6 @@ function renderPagination(totalItems, currentPage) {
       </button>`;
   }
 
-  // Кнопка "Вперед"
   buttons += `
     <button class="page-btn ${currentPage === totalPages ? 'disabled' : ''}" 
             data-page="${currentPage + 1}"
@@ -86,7 +83,6 @@ function renderPagination(totalItems, currentPage) {
 
   pagination.innerHTML = buttons;
 
-  // Обработчики кликов
   document.querySelectorAll('.page-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       if(btn.classList.contains('disabled')) return;

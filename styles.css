@@ -3,13 +3,15 @@ body {
   margin: 0;
   padding: 0;
 
-  background-color: #faf2dd;
+  background-color: #faefd4;
 }
 
 header {
   background-color: #f8b400;
   padding: 1rem;
   text-align: center;
+
+  height: 15vw;
 
   display: flex;
   flex-direction: column;
@@ -44,7 +46,7 @@ h3 {
   font-size: 1.5vw;
 }
 
-input {
+input, .load-more-btn {
   width: 20vw;
   height: 3vw;
   font-size: 1.2vw;
@@ -242,3 +244,57 @@ td {
   border-bottom: 1px solid rgb(255 203 0 / 38%);
   background-color: #ffaa001a;
 }
+
+footer {
+  text-align: center;
+  font-size: 1vw;
+}
+
+.main-content{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+
+.pagination {
+  display: flex;
+  gap: 1vw;
+  justify-content: center;
+  margin: 2vw 0;
+  flex-wrap: wrap;
+}
+
+.page-btn {
+  padding: 0.8vw 1vw;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+  border-radius: 20px;
+  transition: all 0.3s;
+
+  font-size: 1vw;
+}
+
+.page-btn:hover {
+  background: #f0f0f0;
+}
+
+.page-btn.active {
+  background: #f8b400;
+  color: white;
+  border-color: #f8b400;
+}
+
+.header_title{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1vw;
+}
+
+.header-logo{
+  width: 4vw;
+  height: 4vw;
+}
+

@@ -12,14 +12,18 @@
 </head>
 <body>
   <header>
-    <h1>Recipes</h1>
+    <div class="header_title">
+      <h1>Recipes</h1>
+      <img src="./img/cook.png" alt="Логотип" class="header-logo">
+    </div>
     <form id="search-form">
       <input type="text" id="search" placeholder="Search for a recipe...">
     </form>
   </header>
   
-  <main>
+  <main class="main-content">
     <section id="recipes"></section>
+    <div id="pagination" class="pagination"></div>
   </main>
 
   <div class="modal">
@@ -57,12 +61,12 @@
 ALL RIGHTS RESERVED. FOR PERSONS OVER 18 YEARS OF AGE</pre>
   </footer>
 
-  <form id="add-recipe-form">
+  <!--<form id="add-recipe-form">
     <input type="text" id="new-recipe-title" placeholder="Title of recipe" required>
     <input type="text" id="new-recipe-image" placeholder="URL of image" required>
     <textarea id="new-recipe-description" placeholder="Description" required></textarea>
     <button type="submit">Add recipe</button>
-</form>
+</form>-->
 
 <script src="./script.js"></script>
 </body>
@@ -75,32 +79,3 @@ ALL RIGHTS RESERVED. FOR PERSONS OVER 18 YEARS OF AGE</pre>
 
 
 
-
-app.get('/api/meals', async (req, res) => {
-  try {
-    const { search } = req.query;
-    const url = search 
-      ? `https://www.themealdb.com/api/json/v1/1/search.php?s=${search}`
-      : 'https://www.themealdb.com/api/json/v1/1/filter.php?c=Dessert';
-
-    const apiRes = await fetch(url);
-    const data = await apiRes.json();
-
-    // Для пустого поиска получаем полные данные
-    if (!search && data.meals) {
-      const detailedMeals = await Promise.all(data.meals.map(async meal => {
-        const detailRes = await fetch(
-          `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${meal.idMeal}`
-        );
-        const detailData = await detailRes.json();
-        return detailData.meals[0];
-      }));
-      res.json(detailedMeals);
-    } else {
-      res.json(data.meals || []);
-    }
-  } catch (error) {
-    console.error('Error:', error);
-    res.status(500).json({ error: 'API request failed' });
-  }
-});

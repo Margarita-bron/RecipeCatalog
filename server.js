@@ -8,28 +8,41 @@ app.use(cors());
 
 app.get('/api/meals', async (req, res) => {
   try {
-    const { search } = req.query;
+    const { search, page = 1, limit = 12 } = req.query;
     const url = search 
       ? `https://www.themealdb.com/api/json/v1/1/search.php?s=${search}`
       : 'https://www.themealdb.com/api/json/v1/1/filter.php?c=Dessert';
 
     const apiRes = await fetch(url);
     const data = await apiRes.json();
-    if (!search && data.meals) {
-      const detailedMeals = await Promise.all(data.meals.map(async meal => {
+    let meals = data.meals || [];
+
+    if (!search && meals.length > 0) {
+      meals = await Promise.all(meals.slice(0, 20).map(async meal => {
         const detailRes = await fetch(
           `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${meal.idMeal}`
         );
         const detailData = await detailRes.json();
-        return detailData.meals[0];
+        return detailData?.meals?.[0] || null;
       }));
-      res.json(detailedMeals);
-    } else {
-      res.json(data.meals || []);
+      meals = meals.filter(Boolean);
     }
+    const start = (page - 1) * limit;
+    const end = start + parseInt(limit);
+    const paginatedMeals = meals.slice(start, end);
+
+    res.json({
+      meals: paginatedMeals,
+      total: meals.length,
+      hasMore: end < meals.length
+    });
   } catch (error) {
     console.error('Error:', error);
-    res.status(500).json({ error: 'API request failed' });
+    res.status(500).json({ 
+      meals: [],
+      total: 0,
+      hasMore: false 
+    });
   }
 });
 

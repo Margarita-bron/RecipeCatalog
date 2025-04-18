@@ -37,17 +37,21 @@ function renderMeals(meals) {
 
 async function searchMeals(query, page = 1) {
   try {
+    showRecipesLoading();
+
     const res = await fetch(`http://localhost:3000/api/meals?search=${encodeURIComponent(query)}&page=${page}&limit=12`);
     const { meals = [], total = 0 } = await res.json();
 
     totalMeals = total;
     currentPage = page;
   
+    hideRecipesLoading();
     renderMeals(meals);
     renderPagination(total, page);
 
   } catch (error) {
     console.error('Error:', error);
+    hideRecipesLoading();
     recipesContainer.innerHTML = '<p>Error loading data</p>';
   }
 }
@@ -149,4 +153,13 @@ function getIngredientsList(meal) {
   }
   
   return ingredients;
+}
+
+function showRecipesLoading() {
+  document.getElementById('loading-recipes').style.display = 'block';
+  recipesContainer.innerHTML = ''; 
+}
+
+function hideRecipesLoading() {
+  document.getElementById('loading-recipes').style.display = 'none';
 }

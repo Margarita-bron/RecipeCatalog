@@ -115,17 +115,16 @@ input, .load-more-btn {
 }
 
 .modal {
-  overflow: auto; /* Прокрутка всего модального окна */
+  overflow: auto; 
 }
 
-/* Для контейнера контента */
 .modal-content {
-  max-height: 90vh; /* Ограничение по высоте */
-  overflow-y: auto; /* Вертикальная прокрутка */
+  max-height: 90vh;
+  overflow-y: auto; 
   padding: 20px;
   background: white;
   border-radius: 8px;
-  margin: 5vh auto; /* Центрирование с отступом */
+  margin: 5vh auto; 
 }
 
 .modal-content {
@@ -187,7 +186,7 @@ img {
   font-size: 1.3vw;
 }
 
-#modal-subtitle{
+.modal-subtitle{
   font-size: 1vw;
 }
 
@@ -298,3 +297,17 @@ footer {
   height: 4vw;
 }
 
+#loading-recipes {
+  width: 2vw;
+  height: 2vw;
+  margin: 2vw auto;
+  border: 4px solid #dba934;
+  border-top: 4px solid #ffffff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg);}
+  100% { transform: rotate(360deg);}
+}

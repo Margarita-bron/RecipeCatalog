@@ -23,6 +23,7 @@
   
   <main class="main-content">
     <section id="recipes"></section>
+    <div id="loading-recipes" class="loader" style="display: none;"></div>
     <div id="pagination" class="pagination"></div>
   </main>
 
@@ -36,7 +37,7 @@
           <img id="modal-image" src="" alt="">
         </div>
         <div>
-          <h3 id="modal-subtitle">Ingredients:</h3>
+          <h3 class="modal-subtitle">Ingredients:</h3>
           <table class="ingredients-table" id="modal-ingredients">
             <thead>
               <tr>
@@ -47,7 +48,7 @@
             <tbody>
             </tbody>
           </table>
-          <h3 id="modal-subtitle">Instruction:</h3>
+          <h3 class="modal-subtitle">Instruction:</h3>
           <p id="modal-instructions"></p>
         </div>
       </div>
@@ -60,13 +61,6 @@
     <pre>         &copy;Margarita Savonevskaya, 2025 
 ALL RIGHTS RESERVED. FOR PERSONS OVER 18 YEARS OF AGE</pre>
   </footer>
-
-  <!--<form id="add-recipe-form">
-    <input type="text" id="new-recipe-title" placeholder="Title of recipe" required>
-    <input type="text" id="new-recipe-image" placeholder="URL of image" required>
-    <textarea id="new-recipe-description" placeholder="Description" required></textarea>
-    <button type="submit">Add recipe</button>
-</form>-->
 
 <script src="./script.js"></script>
 </body>
